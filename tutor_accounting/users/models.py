@@ -31,22 +31,3 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.username
-
-
-class Payment(models.Model):
-    student = models.ForeignKey(
-        CustomUser,
-        on_delete=models.CASCADE,
-        verbose_name="Ученик"
-    )
-    date = models.DateField(
-        verbose_name="Месяц и год оплаты"
-    )
-    amount = models.IntegerField(default=0)
-
-    class Meta:
-        verbose_name = "Оплата"
-        verbose_name_plural = "Оплаты"
-
-    def __str__(self):
-        return f"Оплата {self.student} за {self.date}"

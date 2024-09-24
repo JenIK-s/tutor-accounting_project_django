@@ -51,4 +51,20 @@ class Lesson(models.Model):
         return f"Занятие {self.student} {self.date}"
 
 
+class Payment(models.Model):
+    student = models.ForeignKey(
+        Student,
+        on_delete=models.CASCADE,
+        verbose_name="Ученик"
+    )
+    date = models.DateField(
+        verbose_name="Месяц и год оплаты"
+    )
+    amount = models.IntegerField(default=0)
 
+    class Meta:
+        verbose_name = "Оплата"
+        verbose_name_plural = "Оплаты"
+
+    def __str__(self):
+        return f"Оплата {self.student} за {self.date}"
