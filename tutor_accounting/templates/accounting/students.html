@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    Ученики
+{% endblock %}
+
+{% block content %}
+    <div class="container py-5">
+        <h3 class="text-center mb-4">Ученики:</h3>
+        <ul class="list-group">
+            {% for student in students %}
+                <li class="list-group-item">
+                    <a href="{% url "accounting:students_detail" student.pk %}" class="text-decoration-none">{{ student }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

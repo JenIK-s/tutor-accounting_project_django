@@ -22,7 +22,7 @@ class Student(models.Model):
         verbose_name_plural = "Ученики"
 
     def __str__(self):
-        return self.username
+        return self.first_name
 
 
 class Lesson(models.Model):
@@ -36,7 +36,7 @@ class Lesson(models.Model):
     )
     paid_for = models.BooleanField(
         default=False,
-        verbose_name="Оплата"
+        verbose_name="Оплачено"
     )
     conducted = models.BooleanField(
         default=False,
@@ -60,7 +60,10 @@ class Payment(models.Model):
     date = models.DateField(
         verbose_name="Месяц и год оплаты"
     )
-    amount = models.IntegerField(default=0)
+    amount = models.IntegerField(
+        default=0,
+        verbose_name="Сумма"
+    )
 
     class Meta:
         verbose_name = "Оплата"
@@ -68,3 +71,37 @@ class Payment(models.Model):
 
     def __str__(self):
         return f"Оплата {self.student} за {self.date}"
+
+
+class Schedule(models.Model):
+    choises = (
+        ("Не выбрано", "Не выбрано"),
+        ("Понедельник", "Создан"),
+        ("Вторник", "Собирается"),
+        ("Среда", "В пути"),
+        ("Четверг", "Доставлено"),
+        ("Пятница", "Получено"),
+        ("Суббота", "Суббота"),
+        ("Воскресенье", "Воскресенье")
+    )
+    student = models.ForeignKey(
+        Student,
+        on_delete=models.CASCADE,
+        verbose_name="Ученик"
+    )
+    weekday = models.CharField(
+        max_length=50,
+        default="Не выбрано",
+        choices=choises,
+        verbose_name="День недели",
+    )
+    time = models.TimeField(
+        verbose_name="Время"
+    )
+
+    class Meta:
+        verbose_name = "День занятия"
+        verbose_name_plural = "Дни занятий"
+
+    def __str__(self):
+        return f"{self.student} {self.weekday}"
