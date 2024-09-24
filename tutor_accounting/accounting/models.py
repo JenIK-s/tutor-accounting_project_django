@@ -1,10 +1,33 @@
 from django.db import models
-from users.models import CustomUser
+
+
+class Student(models.Model):
+    first_name = models.CharField(
+        max_length=50,
+        verbose_name="Имя",
+    )
+    last_name = models.CharField(
+        max_length=50,
+        verbose_name="Фамилия",
+        blank=True,
+        null=True,
+    )
+    cost = models.IntegerField(
+        default=1000,
+        verbose_name="Стоимость часа"
+    )
+
+    class Meta:
+        verbose_name = "Ученик"
+        verbose_name_plural = "Ученики"
+
+    def __str__(self):
+        return self.username
 
 
 class Lesson(models.Model):
     student = models.ForeignKey(
-        CustomUser,
+        Student,
         on_delete=models.CASCADE,
         verbose_name="Ученик"
     )
@@ -26,4 +49,6 @@ class Lesson(models.Model):
 
     def __str__(self):
         return f"Занятие {self.student} {self.date}"
+
+
 
