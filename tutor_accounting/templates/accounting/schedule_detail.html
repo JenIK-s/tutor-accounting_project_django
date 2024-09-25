@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    Расписание занятий | NAME
+{% endblock %}
+
+{% block content %}
+    <hr class="hr-lg mt-0 mb-2 w-10 mx-auto hr-primary">
+<h2 class="text-slab text-center text-uppercase mt-0 mb-5">
+            ЗАНЯТИЕ | {{ lesson.student.first_name }} {% if lesson.student.last_name %} {{ lesson.student.last_name }} {% endif %}
+        </h2>
+    <h4 class="text-slab text-center text-uppercase mt-0 mb-5">{{ date }} - {{ time }}</h4>
+
+
+
+    <div class="card text-center">
+  <div class="card-header">
+  {% if lesson.is_cancelled %}
+  Отменено
+  {% else %}
+    {% if lesson.conducted %} Проведено {% else %} Не проведено {% endif %} | {% if lesson.paid_for %} Оплачено {% else %} Не оплачено {% endif %}
+  {% endif %}
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">Занятие | {{ lesson.student.first_name }} {% if lesson.student.last_name %} {{ lesson.student.last_name }} {% endif %}</h5>
+    <p class="card-text">С вспомогательным текстом ниже в качестве естественного перехода к дополнительному контенту.</p>
+  <form method="POST">
+  {% csrf_token %}
+    {% if lesson.conducted or lesson.is_cancelled %}
+        <button type="submit" class="btn btn-secondary" disabled>Проведено</button>
+    {% else %}
+        <button type="submit" name="action" value="conducted" class="btn btn-danger">Проведено</button>
+    {% endif %}
+      {% if lesson.paid_for or lesson.is_cancelled %}
+          <button type="submit" class="btn btn-secondary" disabled>Оплачено</button>
+      {% else %}
+          <button type="submit" name="action" value="paid" class="btn btn-danger">Оплачено</button>
+      {% endif %}
+  <br>
+  <br>
+  {% if lesson.conducted  or lesson.is_cancelled %}
+      <button type="submit" name="action" value="move" class="btn btn-secondary" disabled>Перенести</button>
+      <button type="submit" name="action" value="cancel" class="btn btn-secondary" disabled>Отменить</button>
+  {% else %}
+    <button type="submit" name="action" value="move" class="btn btn-warning">Перенести</button>
+      <button type="submit" name="action" value="cancel" class="btn btn-warning">Отменить</button>
+  {% endif %}
+  </form>
+
+  </div>
+  <div class="card-footer text-muted">
+    2 дня спустя
+  </div>
+</div>
+{% endblock %}

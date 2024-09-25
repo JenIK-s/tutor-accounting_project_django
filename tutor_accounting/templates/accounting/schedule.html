@@ -5,5 +5,56 @@
 {% endblock %}
 
 {% block content %}
+    {% block static %}
+        <link rel="stylesheet" href={% static "css/style.css" %}>
+    {% endblock %}
 
+{#    <link rel="stylesheet" type="text/css"#}
+{#          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">#}
+{#    <div class="container animated animated-done bootdey" data-animate="fadeIn" data-animate-delay="0.05"#}
+{#         style="animation-delay: 0.05s;">#}
+{#        <hr class="hr-lg mt-0 mb-2 w-10 mx-auto hr-primary">#}
+{#        <h2 class="text-slab text-center text-uppercase mt-0 mb-5">#}
+{#            Расписание занятий#}
+{#        </h2>#}
+{#        <div class="timeline timeline-left mx-lg-10">#}
+{#{% for day, schedule in week %}#}
+{#        <div class="timeline-breaker timeline-breaker-middle">{{ day }}</div>#}
+{#    {% if not schedule %}#}
+{#            <div class="timeline-item mt-3 row text-center p-2">#}
+{#                <div class="col font-weight-bold text-md-right"></div>#}
+{#                <div class="col-1">Выходной</div>#}
+{#                <div class="col font-weight-bold text-md-left"></div>#}
+{#                <div class="col-12 text-xs text-muted"></div>#}
+{#            </div>#}
+{#        {% endif %}#}
+{#    {% for elem in schedule %}#}
+{##}
+{#            <div class="timeline-item mt-3 row text-center p-2">#}
+{#                <div class="col font-weight-bold text-md-right"></div>#}
+{#                <div class="col-1"><a href="{% url "accounting:schedule_detail" elem.student.pk day elem.time %}">{{ elem.student }} {{ elem.time }}</a></div>#}
+{#                <div class="col font-weight-bold text-md-left"></div>#}
+{#                <div class="col-12 text-xs text-muted"></div>#}
+{#            </div>#}
+{#        {% endfor %}#}
+{#        {% endfor %}#}
+{#        </div>#}
+{#    </div>#}
+    <div class="container py-5">
+    {% for day, schedule in week %}
+        <h3 class="text-center mb-4">{{ day }}</h3>
+        <ul class="list-group">
+        {% if not schedule %}
+            <li class="list-group-item">
+                    <a class="text-decoration-none">Выходной</a>
+                </li>
+        {% endif %}
+            {% for elem in schedule %}
+                <li class="list-group-item">
+                    <a href="{% url "accounting:schedule_detail" elem.student.pk day elem.time %}" class="text-decoration-none">{{ elem.time }} - {{ elem.student }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endfor %}
+    </div>
 {% endblock %}

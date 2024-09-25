@@ -16,6 +16,10 @@ class Student(models.Model):
         default=1000,
         verbose_name="Стоимость часа"
     )
+    balance = models.IntegerField(
+        default=0,
+        verbose_name="Баланс"
+    )
 
     class Meta:
         verbose_name = "Ученик"
@@ -42,6 +46,10 @@ class Lesson(models.Model):
         default=False,
         verbose_name="Проведено"
     )
+    is_cancelled = models.BooleanField(
+        default=False,
+        verbose_name="Отменено"
+    )
 
     class Meta:
         verbose_name = "Занятие"
@@ -49,6 +57,37 @@ class Lesson(models.Model):
 
     def __str__(self):
         return f"Занятие {self.student} {self.date}"
+
+
+class LessonAccounting(models.Model):
+    month = models.CharField(
+        max_length=50,
+        verbose_name="Месяц"
+    )
+    year = models.CharField(
+        max_length=50,
+        verbose_name="Год"
+    )
+    quantity_conducted = models.IntegerField(
+        default=0,
+        verbose_name="Количество проведенных"
+    )
+    quantity_paid = models.IntegerField(
+        default=0,
+        verbose_name="Количество оплаченных"
+    )
+    quantity_cancelled = models.IntegerField(
+        default=0,
+        verbose_name="Количество отменённых"
+    )
+    quantity_moved = models.IntegerField(
+        default=0,
+        verbose_name="Количество перенесённых"
+    )
+
+    class Meta:
+        verbose_name = "Учёт занятий"
+        verbose_name_plural = "Учёты занятий"
 
 
 class Payment(models.Model):
@@ -76,17 +115,18 @@ class Payment(models.Model):
 class Schedule(models.Model):
     choises = (
         ("Не выбрано", "Не выбрано"),
-        ("Понедельник", "Создан"),
-        ("Вторник", "Собирается"),
-        ("Среда", "В пути"),
-        ("Четверг", "Доставлено"),
-        ("Пятница", "Получено"),
+        ("Понедельник", "Понедельник"),
+        ("Вторник", "Вторник"),
+        ("Среда", "Среда"),
+        ("Четверг", "Четверг"),
+        ("Пятница", "Пятница"),
         ("Суббота", "Суббота"),
         ("Воскресенье", "Воскресенье")
     )
     student = models.ForeignKey(
         Student,
         on_delete=models.CASCADE,
+        related_name="schedule",
         verbose_name="Ученик"
     )
     weekday = models.CharField(
@@ -96,7 +136,7 @@ class Schedule(models.Model):
         verbose_name="День недели",
     )
     time = models.TimeField(
-        verbose_name="Время"
+        verbose_name="Время начала занятия"
     )
 
     class Meta:
@@ -105,3 +145,14 @@ class Schedule(models.Model):
 
     def __str__(self):
         return f"{self.student} {self.weekday}"
+
+
+class CreateSchedule(models.Model):
+    is_created = models.BooleanField(
+        default=False,
+        verbose_name="Расписание создано на текущую неделю"
+    )
+    week_number = models.IntegerField(
+        default=0,
+        verbose_name="Номер недели"
+    )

@@ -23,7 +23,18 @@ class CustomUser(AbstractUser):
         blank=True,
         null=True,
     )
-    cost = models.IntegerField(default=1000)
+    cost = models.IntegerField(
+        default=1000,
+        verbose_name="Стоимость часа"
+    )
+    balance = models.IntegerField(
+        default=0,
+        verbose_name="Баланс"
+    )
+    is_student = models.BooleanField(
+        default=False,
+        verbose_name="Ученик"
+    )
 
     class Meta:
         verbose_name = "Пользователь"
