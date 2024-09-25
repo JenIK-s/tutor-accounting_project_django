@@ -10,7 +10,7 @@
         <ul class="list-group">
             {% for student in students %}
                 <li class="list-group-item">
-                    <a href="{% url "accounting:students_detail" student.pk %}" class="text-decoration-none">{{ student }}</a>
+                    <a href="{% url "accounting:students_detail" student.pk %}" class="text-decoration-none">{{ student.first_name }}{% if student.last_name %} {{ student.last_name }} {% endif %}</a>
                 </li>
             {% endfor %}
         </ul>

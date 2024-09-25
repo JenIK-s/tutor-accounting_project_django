@@ -51,7 +51,7 @@
         {% endif %}
             {% for elem in schedule %}
                 <li class="list-group-item">
-                    <a href="{% url "accounting:schedule_detail" elem.student.pk day elem.time %}" class="text-decoration-none">{{ elem.time }} - {{ elem.student }}</a>
+                    <a href="{% url "accounting:schedule_detail" elem.student.pk day elem.time %}" class="text-decoration-none">{{ elem.time }} - {{ elem.student.first_name }}{% if elem.student.last_name %} {{ elem.student.last_name }} {% endif %}</a>
                 </li>
             {% endfor %}
         </ul>

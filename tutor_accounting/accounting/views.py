@@ -1,13 +1,14 @@
 from django.shortcuts import render
 from .models import (
     Student, Lesson, Payment,
-    Schedule, CreateSchedule, LessonAccounting
+    CreateSchedule, LessonAccounting
 )
 
 from django.contrib.auth import get_user_model
-
+from users.models import Schedule
 
 import datetime
+from django.contrib.admin.views.decorators import staff_member_required
 
 User = get_user_model()
 
@@ -38,8 +39,9 @@ def get_week_days(year=datetime.datetime.today().year, week=datetime.datetime.no
     return week_days
 
 
+@staff_member_required
 def students(request):
-    students_all = Student.objects.all()
+    students_all = User.objects.filter(is_student=True)
     return render(
         request,
         "accounting/students.html",
@@ -49,8 +51,9 @@ def students(request):
     )
 
 
+@staff_member_required
 def students_detail(request, pk):
-    student = Student.objects.get(pk=pk)
+    student = User.objects.get(pk=pk)
     return render(
         request,
         "accounting/students_detail.html",
@@ -60,6 +63,7 @@ def students_detail(request, pk):
     )
 
 
+@staff_member_required
 def schedule(request):
     week = datetime.datetime.now().isocalendar()[1]
     schedule_all = get_week_days()
@@ -84,9 +88,10 @@ def schedule(request):
     )
 
 
+@staff_member_required
 def schedule_detail(request, pk, date, time):
     date_time = f"{date.split()[1]} {time}"
-    student = Student.objects.get(pk=pk)
+    student = User.objects.get(pk=pk)
     lesson = Lesson.objects.filter(student=student, date=date_time)
     if request.method == "POST":
         obj, created = LessonAccounting.objects.get_or_create(
@@ -117,3 +122,7 @@ def schedule_detail(request, pk, date, time):
             "time": time
         }
     )
+
+
+def profile(request):
+    return render(request, "accounting/profile.html")

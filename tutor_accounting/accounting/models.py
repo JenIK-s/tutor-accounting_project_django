@@ -1,4 +1,7 @@
 from django.db import models
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 class Student(models.Model):
@@ -31,9 +34,15 @@ class Student(models.Model):
 
 class Lesson(models.Model):
     student = models.ForeignKey(
-        Student,
+        User,
         on_delete=models.CASCADE,
         verbose_name="Ученик"
+    )
+    tutor = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="tutor",
+        verbose_name="Преподаватель"
     )
     date = models.DateTimeField(
         verbose_name="Дата проведения занятия"
@@ -92,7 +101,7 @@ class LessonAccounting(models.Model):
 
 class Payment(models.Model):
     student = models.ForeignKey(
-        Student,
+        User,
         on_delete=models.CASCADE,
         verbose_name="Ученик"
     )
@@ -110,41 +119,6 @@ class Payment(models.Model):
 
     def __str__(self):
         return f"Оплата {self.student} за {self.date}"
-
-
-class Schedule(models.Model):
-    choises = (
-        ("Не выбрано", "Не выбрано"),
-        ("Понедельник", "Понедельник"),
-        ("Вторник", "Вторник"),
-        ("Среда", "Среда"),
-        ("Четверг", "Четверг"),
-        ("Пятница", "Пятница"),
-        ("Суббота", "Суббота"),
-        ("Воскресенье", "Воскресенье")
-    )
-    student = models.ForeignKey(
-        Student,
-        on_delete=models.CASCADE,
-        related_name="schedule",
-        verbose_name="Ученик"
-    )
-    weekday = models.CharField(
-        max_length=50,
-        default="Не выбрано",
-        choices=choises,
-        verbose_name="День недели",
-    )
-    time = models.TimeField(
-        verbose_name="Время начала занятия"
-    )
-
-    class Meta:
-        verbose_name = "День занятия"
-        verbose_name_plural = "Дни занятий"
-
-    def __str__(self):
-        return f"{self.student} {self.weekday}"
 
 
 class CreateSchedule(models.Model):

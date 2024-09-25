@@ -42,3 +42,38 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.username
+
+
+class Schedule(models.Model):
+    choises = (
+        ("Не выбрано", "Не выбрано"),
+        ("Понедельник", "Понедельник"),
+        ("Вторник", "Вторник"),
+        ("Среда", "Среда"),
+        ("Четверг", "Четверг"),
+        ("Пятница", "Пятница"),
+        ("Суббота", "Суббота"),
+        ("Воскресенье", "Воскресенье")
+    )
+    student = models.ForeignKey(
+        CustomUser,
+        on_delete=models.CASCADE,
+        related_name="schedule",
+        verbose_name="Ученик"
+    )
+    weekday = models.CharField(
+        max_length=50,
+        default="Не выбрано",
+        choices=choises,
+        verbose_name="День недели",
+    )
+    time = models.TimeField(
+        verbose_name="Время начала занятия"
+    )
+
+    class Meta:
+        verbose_name = "День занятия"
+        verbose_name_plural = "Дни занятий"
+
+    def __str__(self):
+        return f"{self.student} {self.weekday}"

@@ -1,3 +1,4 @@
+{% if user.is_authenticated %}
 <header>
     <nav class="py-2 bg-light border-bottom">
     <div class="container d-flex flex-wrap">
@@ -6,8 +7,15 @@
         <li class="nav-item"><a href="{% url "accounting:schedule" %}" class="nav-link link-dark px-2">Расписание</a></li>
       </ul>
       <ul class="nav">
-        <li class="nav-item"><a href="#" class="nav-link link-dark px-2">Вход</a></li>
+
+            {% if user.is_authenticated %}
+                <li class="nav-item"><a href="#" class="nav-link link-dark px-2">{{ user.username }}</a></li>
+                <li class="nav-item"><a href="{% url "users:logout" %}" class="nav-link link-dark px-2">Выход</a></li>
+            {% else %}
+            <li class="nav-item"><a href="{% url "users:signin" %}" class="nav-link link-dark px-2">Вход</a></li>
+            {% endif %}
       </ul>
     </div>
   </nav>
 </header>
+{% endif %}
